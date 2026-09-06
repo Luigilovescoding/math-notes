@@ -19,4 +19,4 @@ in S + N, the polynomial being constructed by Hermite-type interpolation.
 
 ---
 
-Luigi de Alfaro — École Polytechnique
+Luigi de Alfaro - École Polytechnique
