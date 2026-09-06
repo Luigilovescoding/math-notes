@@ -1,0 +1,166 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\title{Solution to the uniqueness of Dunford decomposition}
+\author{Luigi de Alfaro}
+\date{2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem Statement}
+
+Let \( n \in \mathbb{N} \), and let \( N, N', S, S' \in M_n(\mathbb{R}) \) such that:
+\begin{itemize}
+    \item \( S \) and \( N \) commute (\( SN = NS \)),
+    \item \( S' \) and \( N' \) commute (\( S'N' = N'S' \)),
+    \item \( S \) and \( S' \) are diagonalizable,
+    \item \( N \) and \( N' \) are nilpotent,
+    \item \( S + N = S' + N' \).
+\end{itemize}
+
+Prove that \( S = S' \) and \( N = N' \).
+
+Rather than the usual proof, we will solve this problem considering \( P(S + N) \) for a well-chosen polynomial \( P \in \mathbb{R}[X] \). The polynomial is obtained by Hermite interpolation: we prescribe not only its values at the eigenvalues of \( S \), but also its first \( n-1 \) derivatives there.
+
+I stumbled across this problem as a nineteen-year-old and decided to give it a go, finding this solution by myself. At the time, I had no knowledge of the Dunford decomposition. I am aware that this problem has been solved for a long time, but I wanted to share the proof I found.
+
+\section{Notation}
+
+
+Since \( S \) is diagonalizable in \( M_n(\mathbb{R}) \), its eigenvalues are real. We write
+\( \lambda_1, \dots, \lambda_r \) for its \emph{distinct} eigenvalues, and
+\( d_1, \dots, d_n \) for its eigenvalues repeated according to multiplicity, so that the
+\( d_j \) are exactly the diagonal entries of a diagonalization of \( S \) and
+\( \{d_1, \dots, d_n\} = \{\lambda_1, \dots, \lambda_r\} \) as sets. Note also that
+\( N^n = 0 \), since a nilpotent matrix of \( M_n(\mathbb{R}) \) has nilpotency index at
+most \( n \).
+
+\section{Solution}
+
+\subsection{Step 1: Spectral properties of \( S \) and \( S' \)}
+
+The matrices \( S \) and \( N \) commute, and both have a characteristic polynomial that
+splits over \( \mathbb{R} \): that of \( S \) because \( S \) is diagonalizable in
+\( M_n(\mathbb{R}) \), and that of \( N \) because \( N \) is nilpotent, so
+\( \chi_N = X^n \). Two commuting matrices with split characteristic polynomials are
+simultaneously trigonalizable, so there is a basis in which \( S \) and \( N \) are both
+upper triangular.
+
+In such a basis, the diagonal of \( S \) carries its eigenvalues \( d_1, \dots, d_n \),
+repeated according to multiplicity. Since \( N \) is nilpotent, in such a basis, \( N \) is strictly upper triangular. Consequently \( S + N \) is upper
+triangular with the same diagonal as \( S \), and therefore:
+
+\( S \) and \( S + N \) have the same eigenvalues, with the same
+multiplicities. The same argument gives that \( S' \) and \( S' + N' \) have the same eigenvalues, with the same
+multiplicities. Since
+\( S + N = S' + N' \), we conclude that  \( S \) and \( S' \)
+have the same eigenvalues, with the same multiplicities.
+
+\subsection{Step 2: Polynomial representation}
+
+Let \( P \in \mathbb{R}[X] \) be a polynomial:
+\[
+P(X) = \sum_{k=0}^d a_k X^k.
+\]
+Since \( S \) is diagonalizable, it can be written as:
+\[
+S = Q 
+\begin{pmatrix}
+d_1 & & \\
+& \ddots & \\
+& & d_n
+\end{pmatrix}
+Q^{-1},
+\]
+where \( d_1, \dots, d_n \) are the eigenvalues of \( S \) repeated according to
+multiplicity.
+Using the commutativity of \( S \) and \( N \), we apply the binomial theorem to \( P(S + N) \):
+\[
+P(S + N) = \sum_{k=0}^d a_k \sum_{i=0}^k \binom{k}{i} Q 
+\begin{pmatrix}
+d_1^{k-i} & & \\
+& \ddots & \\
+& & d_n^{k-i}
+\end{pmatrix}
+Q^{-1} N^i.
+\]
+Rearranging the sums gives:
+\[
+P(S + N) = \sum_{i=0}^d \frac{1}{i!} Q 
+\begin{pmatrix}
+\sum_{k=i}^d a_k \frac{k!}{(k-i)!} d_1^{k-i} & & \\
+& \ddots & \\
+& & \sum_{k=i}^d a_k \frac{k!}{(k-i)!} d_n^{k-i}
+\end{pmatrix}
+Q^{-1} N^i,
+\]
+which simplifies to:
+\[
+P(S + N) = \sum_{i=0}^d \frac{1}{i!} Q 
+\begin{pmatrix}
+P^{(i)}(d_1) & & \\
+& \ddots & \\
+& & P^{(i)}(d_n)
+\end{pmatrix}
+Q^{-1} N^i.
+\]
+
+\subsection{Step 3: Choosing the polynomial \( P \)}
+
+Suppose \( P \) is chosen such that:
+\begin{itemize}
+    \item \( P(\lambda_j) = \lambda_j \) for all \( j \in \llbracket 1, r \rrbracket \),
+    \item \( P^{(i)}(\lambda_j) = 0 \) for all \( j \in \llbracket 1, r \rrbracket \) and all \( i \in \llbracket 1, n-1 \rrbracket \).
+\end{itemize}
+% CORRIGE : les conditions sont imposees aux valeurs propres distinctes ; comme chaque
+% d_m est l'un des lambda_j, elles valent automatiquement pour tous les d_m.
+Since every \( d_m \) is one of the \( \lambda_j \), these conditions give
+\( P(d_m) = d_m \) and \( P^{(i)}(d_m) = 0 \) for \( 1 \le i \le n-1 \) and every
+\( m \in \llbracket 1, n \rrbracket \).
+
+In the expansion of Step 2, the term \( i = 0 \) is then
+\( Q\,\mathrm{diag}(d_1, \dots, d_n)\,Q^{-1} = S \); the terms with
+\( 1 \le i \le n-1 \) vanish because the diagonal matrix is zero; and the terms with
+\( i \ge n \) vanish because \( N^i = 0 \). Hence
+\[
+  P(S+N) = S .
+\]
+The same polynomial works for \( S' \), since \( S \) and \( S' \) have the same
+eigenvalues by Step 1, so \( P(S' + N') = S' \). As \( S + N = S' + N' \), it follows
+that \( S = S' \).
+
+\subsection{Step 4: Existence of the polynomial \( P \)}
+
+The conditions of Step 3 prescribe, at each of the \( r \) distinct points
+\( \lambda_1, \dots, \lambda_r \), the value of \( P \) and its first \( n-1 \)
+derivatives. This is exactly a Hermite interpolation problem, and it always has a
+solution.
+
+Consider the linear map
+\[
+  \Phi : \mathbb{R}_{rn-1}[X] \longrightarrow \mathbb{R}^{rn}, \qquad
+  P \longmapsto \Big( P(\lambda_j), P'(\lambda_j), \dots, P^{(n-1)}(\lambda_j) \Big)_{1 \le j \le r},
+\]
+where \( \mathbb{R}_{rn-1}[X] \) denotes the polynomials of degree strictly less than
+\( rn \). Both spaces have dimension \( rn \), so it suffices to show that \( \Phi \) is
+injective.
+
+Let \( P \in \ker \Phi \). For each \( j \), the first \( n \) derivatives of \( P \) at
+\( \lambda_j \) (orders \( 0 \) to \( n-1 \)) vanish, so \( \lambda_j \) is a root of
+\( P \) of multiplicity at least \( n \). The \( \lambda_j \) being pairwise distinct, the
+polynomial \( \prod_{j=1}^{r} (X - \lambda_j)^n \), of degree \( rn \), divides \( P \).
+Since \( \deg P < rn \), this forces \( P = 0 \).
+
+Hence \( \Phi \) is bijective, and there exists a polynomial \( P \) of degree less than
+\( rn \) satisfying all the conditions of Step 3.
+
+\subsection{Step 5: Conclusion}
+
+Applying \( P(S + N) = S \) and \( P(S' + N') = S' \), and given \( S + N = S' + N' \), we
+obtain \( S = S' \). Subtracting from \( S + N = S' + N' \) then gives \( N = N' \).
+
+\end{document}
